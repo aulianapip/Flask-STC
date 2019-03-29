@@ -19,6 +19,11 @@ def notfound(error):
     return render_template("404.html")
 
 
+@app.route('/upload', methods= ['GET','POST'])
+def upload():
+    return render_template("upload_data.html")
+
+
 
 
 
