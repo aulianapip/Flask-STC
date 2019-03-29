@@ -3,17 +3,6 @@ from pymongo import MongoClient
 class DBModel:
 	client = MongoClient()
 
-# **********************************Login********************************************
-
-	def find_user(self, database, collection, find):
-		db = self.client[database]
-		result= db[collection].find_one({'user':find})
-		return result
-
-	def insert_user(self, database, collection, document):
-		db = self.client[database]
-		results = db[collection].insert(document)
-		return results
 
 
 # **********************************Upload********************************************

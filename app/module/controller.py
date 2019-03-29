@@ -34,14 +34,14 @@ def Pilih_data():
         f.save(os.path.join('app/upload_data', file))
 
         dbmodel = x.DBModel()
-        find_file = dbmodel.find_file("Judul_Skripsi", "file", file, s)
+        find_file = dbmodel.find_file("Judul_Penelitian", "file", file, s)
 
         if find_file == True:
-            dbmodel.delete_same("Judul_Skripsi", "file", file, s)
+            dbmodel.delete_same("Judul_Penelitian", "file", file, s)
 
-        dbmodel.insert_file("Judul_Skripsi", "file", file, s)
+        dbmodel.insert_file("Judul_Penelitian", "file", file, s)
 
-        get_file = dbmodel.get_file_desc("Judul_Skripsi", "file")
+        get_file = dbmodel.get_file_desc("Judul_Penelitian", "file")
         for w in get_file:
             values = w.values()
             for y in values:
@@ -73,14 +73,14 @@ def Tampil_data():
 
         dbmodel = x.DBModel()
         # get sheet dari database, hasil upload terakhir
-        get_sfile = dbmodel.get_file_desc("Judul_Skripsi", "file")
+        get_sfile = dbmodel.get_file_desc("Judul_Penelitian", "file")
         for w in get_sfile:
             values = w.values()
             for y in values:
                 sheet = y
 
         # get nama file dari database, hasil upload terakhir
-        get_nfile = dbmodel.get_file_desc2("Judul_Skripsi", "file")
+        get_nfile = dbmodel.get_file_desc2("Judul_Penelitian", "file")
         for n in get_nfile:
             values = n.values()
             for q in values:
@@ -107,8 +107,8 @@ def Tampil_data():
         pd.options.display.max_colwidth = 999
 
         dbmodel = x.DBModel() #memanggil file model dimodel class DBModel
-        result_insert_table= dbmodel.insert_cleaning_data("Judul_Skripsi","datanya",data)
-        result_insert_header = dbmodel.insert_header("Judul_Skripsi","judulnya",header)
+        result_insert_table= dbmodel.insert_cleaning_data("Judul_Penelitian","datanya",data)
+        result_insert_header = dbmodel.insert_header("Judul_Penelitian","judulnya",header)
     return render_template('tampil_data.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
 
 @app.route('/stopword', methods= ['GET','POST'])
