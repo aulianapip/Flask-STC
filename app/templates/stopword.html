@@ -1,12 +1,109 @@
-<html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <title>Stopword</title>
+    <meta charset="utf-8" />
+
+    <meta  name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Upload Data Skripsi </title>
+    <!-- Bootstrap Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/css/bootstrap.css')}}  />
+    <!-- FontAwesome Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/css/font-awesome.css')}} />
+    <!-- Morris Chart Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/js/morris/morris-0.4.3.min.css')}} />
+        <!-- Custom Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/css/custom-styles.css')}} />
+    <!-- Google Fonts-->
+    <link rel="stylesheet" type='text/css' href={{url_for('static',filename='http://fonts.googleapis.com/css?family=Open+Sans')}} />
 </head>
+
 <body>
-<form action="http://localhost:5000/stemming" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="text" name="sheet">
-    <button type="submit">PROSES</button>
-</form>
+   
+        <div id="page-wrapper">
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            Hasil Stopword Judul
+                        </h1>
+                        <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="http://localhost:5000/tokenisasi">Tokenisasi</a></li>
+                          <li class="breadcrumb-item"><a href="http://localhost:5000/filtering">Filtering</a></li>
+                          <li class="breadcrumb-item"><a href="http://localhost:5000/stemming">Stemming</a></li>
+                        </ol>
+                    </div>
+                    </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+<div class="table-responsive" style="position : relative; overflow: auto; width:100%; max-height: 400px;">
+   <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+         <thead>
+         <center>
+             {% for table in tables %}
+             {{ table|safe }}
+             {% endfor %}
+         </center>
+       </thead>
+   </table>
+</div>
+     <form action="http://localhost:5353/stemming"  method="POST" enctype="multipart/form-data">
+        <center>
+
+            <button class="btn btn-primary" type="submit">Stemming</button>
+
+        </center>
+    </form>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+
+                    <!--  end  Context Classes  -->
+                </div>
+            </div>
+                <!-- /. ROW  -->
+   </div>
+                    </div>
+                    <!--End Advanced Tables -->
+
+                    <!--  end  Context Classes  -->
+                </div>
+            </div>
+
+
+</div>
+    <div>
+				<footer><p>All right reserved. Template by: <a href="http://webthemez.com">WebThemez</a></p></footer>
+            </div>
+    </div>
+
+                     </div>
+               </div>
+
+
+   <script src="static/assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="static/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="static/assets/js/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="static/assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="static/assets/js/dataTables/dataTables.bootstrap.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+    </script>
+         <!-- Custom Js -->
+    <script src="static/assets/js/custom-scripts.js"></script>
+
 </body>
 </html>

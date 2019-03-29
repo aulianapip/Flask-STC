@@ -23,6 +23,12 @@ class DBModel:
 		cursor = db[collection].find({},{"_id":0})
 		return cursor
 
+	def get_data_spe(self, database, collection):
+		db = self.client[database]
+		cursor = db[collection].find({},{"Judul":1,"_id":0})
+
+		return cursor
+
 # **********************************Text Mining********************************************
 	def insert_tokenisasi(self, database, collection, documents):
 		db = self.client[database]

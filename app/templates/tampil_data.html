@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,19 +20,25 @@
 </head>
 
 <body>
-  
+    
         <div id="page-wrapper">
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
                         <h1 class="page-header">
-                            Hasil Pemilihan Data
+                            Hasil Pemilihan Judul 
                         </h1>
                     </div>
                     </div>
 
-         
-<div class="table-responsive"style="position : relative; overflow: auto; width:100%; max-height: 400px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+<div class="table-responsive" style="position : relative; overflow: auto; width:100%; max-height: 400px;">
    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
          <thead>
          <center>
@@ -42,6 +49,13 @@
        </thead>
    </table>
 </div>
+     <form action="http://localhost:5353/stopword"  method="POST" enctype="multipart/form-data">
+        <center>
+
+            <button class="btn btn-primary" type="submit">StopWord</button>
+
+        </center>
+    </form>
                         </div>
                     </div>
                     <!--End Advanced Tables -->
@@ -60,15 +74,16 @@
 
 
 </div>
-        <div>
-				
-            </div></div>
+    <div>
+        <footer><p>All right reserved. Template by: <a href="http://webthemez.com">WebThemez</a></p></footer>
+            </div>
+    </div>
 
                      </div>
                </div>
 
 
-   <script src="static/assets/js/jquery-1.10.2.js"></script>
+  <script src="static/assets/js/jquery-1.10.2.js"></script>
       <!-- Bootstrap Js -->
     <script src="static/assets/js/bootstrap.min.js"></script>
     <!-- Metis Menu Js -->
@@ -86,6 +101,4 @@
 
 </body>
 </html>
-
-
 

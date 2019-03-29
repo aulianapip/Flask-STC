@@ -4,6 +4,10 @@ from openpyxl import load_workbook
 import pandas as pd
 import os
 import dbmodel as x
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+# remover = StopWordRemoverFactory().create_stop_word_remover()
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+stemmer = StemmerFactory().create_stemmer()
 
 @app.route('/index')
 def index():
@@ -113,7 +117,42 @@ def Tampil_data():
 
 @app.route('/stopword', methods= ['GET','POST'])
 def stopword():
-    return render_template("stopword.html")
+
+    dbmodel = x.DBModel()
+    get_data = dbmodel.get_data_all("Judul_Penelitian", "datanya")
+    factory = StopWordRemoverFactory()
+    stopword = factory.create_stop_word_remover()
+
+    # list_sentence = []
+    # for reviews in get_data:
+    # 	for review in reviews:
+    # 		data_clean = review.lower()
+    # 		isi = data_clean.values()
+    # 	# isi_judul = isi
+    # 	# data_clean = isi.lower()
+    # 		list_sentence.append(stopword.remove(data_clean))
+    
+    data_s=[]
+    for i in get_data :
+		isi = i.values()
+		isi_judul = isi[0]
+		data_baru2 = isi_judul.lower()
+		data_s.append(stopword.remove(data_baru2))
+
+
+
+    data = pd.DataFrame(data_s)
+    head_filter = []
+    for index in data.columns:
+        custom_head = "K" + str(index)
+        head_filter.append(custom_head)
+    data.columns = head_filter
+
+    dbmodel = x.DBModel()  # memanggil file model dimodel class DBModel
+    dbmodel.insert_filtering("Judul_Penelitian", "Stopword", data)
+    
+
+    return render_template('stopword.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
 
 @app.route('/stemming', methods= ['GET','POST'])
 def stemming():
