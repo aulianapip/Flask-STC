@@ -1,14 +1,14 @@
 from flask import render_template, request, session, redirect,url_for
 from app import app
 from openpyxl import load_workbook
-@app.route('/')
+import pandas as pd
+import os
+import dbmodel as x
+
+@app.route('/index')
 def index():
-    pageData = {
-        "breadcrumb": "Dashboard",
-        "pageHeader": "Dashboard",
-        "pages": "dashboard.html"
-    }
-    return render_template("index.html", pageData=pageData)
+    
+    return render_template('index.html')
 
 # @app.route('/admin')
 # def login():
