@@ -65,15 +65,21 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+             <form id="form3" action="http://localhost:5353" method="post"></form>
+             <a href="javascript:;" class="nav-link" onclick="document.getElementById('form3').submit();">
+            
               <i class="menu-icon mdi mdi-television"></i>
               <span class="menu-title">Dashboard</span>
+           
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/forms/basic_elements.html">
+            <form id="form2" action="http://localhost:5353/upload" method="post"></form>
+             <a href="javascript:;" class="nav-link" onclick="document.getElementById('form2').submit();">
+            
               <i class="menu-icon mdi mdi-backup-restore"></i>
               <span class="menu-title">Load Data</span>
+
             </a>
           </li>
           <li class="nav-item">
@@ -646,6 +652,63 @@
   <!-- Custom js for this page-->
   <script src="/static/js/dashboard.js"></script>
   <!-- End custom js for this page-->
+
+  <script type="text/javascript">
+        'use strict'; // v2.3.2
+var result, zip = new JSZip(),
+  processStartTime, s, i, index, id;
+
+var getTab = function(base64file) {
+
+  zip = zip.load(base64file, {
+    base64: true
+  });
+  result = [];
+  processStartTime = Date.now();
+
+  if (s = zip.file('xl/workbook.xml')) {
+    s = s.asText();
+
+    s = s.split('<sheet ');
+    i = s.length;
+    while (--i) {
+      id = s[i].substr(s[i].indexOf('name="') + 6);
+      result.push(id.substring(0, id.indexOf('"')));
+    }
+  }
+      var sel = document.getElementById('tab-names');
+    for(var i = 0; i < result.length; i++) {
+        var opt = document.createElement('option');
+        opt.innerHTML = result[i];
+        opt.value = result[i];
+        sel.appendChild(opt);
+    }
+  //document.getElementById('tab-names').value = result;
+  console.log(Date.now(), processStartTime, result)
+}
+
+var handleFileSelect = function(evt) {
+  var files = evt.target.files;
+  var file = files[0];
+
+  if (files && file) {
+    var reader = new FileReader();
+
+    reader.onload = function(readerEvt) {
+      var binaryString = readerEvt.target.result;
+      getTab(btoa(binaryString));
+    };
+
+    reader.readAsBinaryString(file);
+  }
+};
+
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}
+    </script>
 </body>
 
 </html>

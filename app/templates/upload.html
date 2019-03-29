@@ -1,12 +1,163 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <title>Upload Data</title>
+    <meta charset="utf-8" />
+
+    <meta  name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Upload Data Skripsi </title>
+    <!-- Bootstrap Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/css/bootstrap.css')}}  />
+    <!-- FontAwesome Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/css/font-awesome.css')}} />
+    <!-- Morris Chart Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/js/morris/morris-0.4.3.min.css')}} />
+        <!-- Custom Styles-->
+    <link rel="stylesheet" href={{url_for('static',filename='assets/css/custom-styles.css')}} />
+    <!-- Google Fonts-->
+    <link rel="stylesheet" type='text/css' href={{url_for('static',filename='http://fonts.googleapis.com/css?family=Open+Sans')}} />
+    <script src="static/assets/js/jszip.min.js"></script>
 </head>
+
 <body>
-<form action="http://localhost:5000/pilih_data" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="text" name="sheet">
-    <button type="submit">LOAD</button>
+   
+        <div id="page-wrapper">
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            Upload Data 
+                        </h1>
+                    </div>
+                    </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+                            <form action="http://localhost:5353/tampil_data" method="POST" enctype="multipart/form-data">
+                                <table>
+                                    <tr>
+                                     <div class="form-group">
+                                         <label>Inputkan Data Judul Skripsi</label>
+                                         <input type="file" name="file" accept=".xlsx" id="filePicker" required>
+                                         <small>**File dengan extensi .xlsx yang dapat di Upload</small>
+                                        </div>
+                                    </tr>
+                                    <tr>
+                                     <div class="form-group" width="30%">
+                                         <label>Inputkan Nama Sheet</label>
+                                         <select class="form-control" name="sheet" id="tab-names" style="width: 15%">
+                                        </select>
+                                         <small>**Tuliskan nama Sheet yang dipilih sesuai Nama Sheet yang tersedia didata Excel dalam Kotak diatas</small>
+                                     </div>
+                                    </tr>
+                            <tr>
+                                <td> <button class="btn btn-primary" type="submit"><i class=" fa fa-upload "></i> Upload</button></td>
+                                <td><button type="reset" onClick="window.location.reload()" class="btn btn-danger"><i class=" fa fa-refresh "></i> Reset</button></td>
+
+                            </tr>
+
+                                            </table>
 </form>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+
+                    <!--  end  Context Classes  -->
+                </div>
+            </div>
+                <!-- /. ROW  -->
+
+
+
+</div>
+            <div>
+				<footer><p>All right reserved. Template by: <a href="http://webthemez.com">WebThemez</a></p></footer>
+            </div>
+        </div>
+
+                     </div>
+               </div>
+
+
+    <!-- JS Scripts-->
+    <script src="static/assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="static/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="static/assets/js/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="static/assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="static/assets/js/dataTables/dataTables.bootstrap.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+    </script>
+         <!-- Custom Js -->
+    <script src="static/assets/js/custom-scripts.js"></script>
+<script type="text/javascript">
+        'use strict'; // v2.3.2
+var result, zip = new JSZip(),
+  processStartTime, s, i, index, id;
+
+var getTab = function(base64file) {
+
+  zip = zip.load(base64file, {
+    base64: true
+  });
+  result = [];
+  processStartTime = Date.now();
+
+  if (s = zip.file('xl/workbook.xml')) {
+    s = s.asText();
+
+    s = s.split('<sheet ');
+    i = s.length;
+    while (--i) {
+      id = s[i].substr(s[i].indexOf('name="') + 6);
+      result.push(id.substring(0, id.indexOf('"')));
+    }
+  }
+      var sel = document.getElementById('tab-names');
+    for(var i = 0; i < result.length; i++) {
+        var opt = document.createElement('option');
+        opt.innerHTML = result[i];
+        opt.value = result[i];
+        sel.appendChild(opt);
+    }
+  //document.getElementById('tab-names').value = result;
+  console.log(Date.now(), processStartTime, result)
+}
+
+var handleFileSelect = function(evt) {
+  var files = evt.target.files;
+  var file = files[0];
+
+  if (files && file) {
+    var reader = new FileReader();
+
+    reader.onload = function(readerEvt) {
+      var binaryString = readerEvt.target.result;
+      getTab(btoa(binaryString));
+    };
+
+    reader.readAsBinaryString(file);
+  }
+};
+
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}
+    </script>
+
 </body>
 </html>
+
