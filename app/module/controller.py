@@ -3,7 +3,7 @@ from app import app
 from openpyxl import load_workbook
 import pandas as pd
 import os
-import dbmodel as x
+
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 # remover = StopWordRemoverFactory().create_stop_word_remover()
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
