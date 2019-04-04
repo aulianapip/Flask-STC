@@ -117,8 +117,16 @@ def Tampil_data():
                 list_sentence.append(stopword.remove(data_clean))
 
 
+        list_stem = []
+        for reviews in list_sentence:
+                data_stem = (reviews.encode("ascii","ignore"))
+                list_stem.append(stemmer.stem(data_stem))
+                
+        
+
+
         pd.options.display.max_colwidth = 999
-        data = pd.DataFrame(list_sentence)
+        data = pd.DataFrame(list_stem)
         head_filter = []
         for index in data.columns:
             custom_head = "Judul" 
