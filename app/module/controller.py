@@ -70,28 +70,15 @@ def Pilih_data():
 def Tampil_data():
     if request.method == 'POST':
 
-        select1 = request.form["select1"]
-        select2 = request.form["select2"]
-        selectcolom =request.form["selectcolom"]
-        namacolom = request.form["namacolom"]
+        select1 = 1
+        select2 = 10
+        selectcolom ="4"
+        namacolom = "judul"
 
-        dbmodel = x.DBModel()
-        # get sheet dari database, hasil upload terakhir
-        get_sfile = dbmodel.get_file_desc("Judul_Penelitian", "file")
-        for w in get_sfile:
-            values = w.values()
-            for y in values:
-                sheet = y
+        
 
-        # get nama file dari database, hasil upload terakhir
-        get_nfile = dbmodel.get_file_desc2("Judul_Penelitian", "file")
-        for n in get_nfile:
-            values = n.values()
-            for q in values:
-                file = q
-
-        wb = load_workbook(filename='app/upload_data/'+file)
-        sheet_ranges = wb[sheet]
+        wb = load_workbook(filename='app/upload_data/penelitian.xlsx')
+        sheet_ranges = wb['DANA UAD']
         data = pd.DataFrame(sheet_ranges.values)
 
         row1 = int(select1)
@@ -102,54 +89,82 @@ def Tampil_data():
         xname = namacolom.split(",") #memisahkan inptan nama kolom berdasarkan koma
         data =data[row1:row2][cols]#data terpilih berdasarkan inputan baris dan kolom
         data.columns = [xname]
-        data = data.dropna()
+         
 
-        header = {}
-        for index, head in enumerate(xname):
-            header[str(index)] = head
+        
+
+        
+
+        
+        factory = StopWordRemoverFactory()
+        stopword = factory.create_stop_word_remover()
+
+        # list_sentence = []
+        # for reviews in get_data:
+        #   for review in reviews:
+        #       data_clean = review.lower()
+        #       isi = data_clean.values()
+        #   # isi_judul = isi
+        #   # data_clean = isi.lower()
+        #       list_sentence.append(stopword.remove(data_clean))
+        a = []
+        a.append(data['judul'].values.tolist())
+        
+        list_sentence=[]
+        for reviews in a:
+            for review in reviews:
+                data_clean = review.lower()
+                list_sentence.append(stopword.remove(data_clean))
+
 
         pd.options.display.max_colwidth = 999
+        data = pd.DataFrame(list_sentence)
+        head_filter = []
+        for index in data.columns:
+            custom_head = "Judul" 
+            head_filter.append(custom_head)
+        data.columns = head_filter
 
-        dbmodel = x.DBModel() #memanggil file model dimodel class DBModel
-        result_insert_table= dbmodel.insert_cleaning_data("Judul_Penelitian","datanya",data)
-        result_insert_header = dbmodel.insert_header("Judul_Penelitian","judulnya",header)
+        # dbmodel = x.DBModel()  # memanggil file model dimodel class DBModel
+        # dbmodel.insert_filtering("Judul_Penelitian", "Stopword", data)
+
     return render_template('tampil_data.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
 
 @app.route('/stopword', methods= ['GET','POST'])
 def stopword():
 
-    dbmodel = x.DBModel()
-    get_data = dbmodel.get_data_all("Judul_Penelitian", "datanya")
-    factory = StopWordRemoverFactory()
-    stopword = factory.create_stop_word_remover()
+  #   dbmodel = x.DBModel()
+  #   get_data = dbmodel.get_data_all("Judul_Penelitian", "datanya")
+  #   factory = StopWordRemoverFactory()
+  #   stopword = factory.create_stop_word_remover()
 
-    # list_sentence = []
-    # for reviews in get_data:
-    # 	for review in reviews:
-    # 		data_clean = review.lower()
-    # 		isi = data_clean.values()
-    # 	# isi_judul = isi
-    # 	# data_clean = isi.lower()
-    # 		list_sentence.append(stopword.remove(data_clean))
+  #   # list_sentence = []
+  #   # for reviews in get_data:
+  #   # 	for review in reviews:
+  #   # 		data_clean = review.lower()
+  #   # 		isi = data_clean.values()
+  #   # 	# isi_judul = isi
+  #   # 	# data_clean = isi.lower()
+  #   # 		list_sentence.append(stopword.remove(data_clean))
     
-    data_s=[]
-    for i in get_data :
-		isi = i.values()
-		isi_judul = isi[0]
-		data_baru2 = isi_judul.lower()
-		data_s.append(stopword.remove(data_baru2))
+  #   data_s=[]
+  #   for i in get_data :
+		# isi = i.values()
+		# isi_judul = isi[0]
+		# data_baru2 = isi_judul.lower()
+		# data_s.append(stopword.remove(data_baru2))
 
 
 
-    data = pd.DataFrame(data_s)
-    head_filter = []
-    for index in data.columns:
-        custom_head = "K" + str(index)
-        head_filter.append(custom_head)
-    data.columns = head_filter
+  #   data = pd.DataFrame(data_s)
+  #   head_filter = []
+  #   for index in data.columns:
+  #       custom_head = "K" + str(index)
+  #       head_filter.append(custom_head)
+  #   data.columns = head_filter
 
-    dbmodel = x.DBModel()  # memanggil file model dimodel class DBModel
-    dbmodel.insert_filtering("Judul_Penelitian", "Stopword", data)
+  #   dbmodel = x.DBModel()  # memanggil file model dimodel class DBModel
+  #   dbmodel.insert_filtering("Judul_Penelitian", "Stopword", data)
     
 
     return render_template('stopword.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
