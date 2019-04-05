@@ -27,45 +27,6 @@ def index():
 def Upload():
     return render_template('upload.html')
 
-@app.route('/pilih_data', methods= ['GET','POST'])
-def Pilih_data():
-    
-
-    if request.method == 'POST':
-        f = request.files['file']
-        file = f.filename
-        s = request.form['sheet']
-        f.save(os.path.join('app/upload_data', file))
-
-        dbmodel = x.DBModel()
-        find_file = dbmodel.find_file("Judul_Penelitian", "file", file, s)
-
-        if find_file == True:
-            dbmodel.delete_same("Judul_Penelitian", "file", file, s)
-
-        dbmodel.insert_file("Judul_Penelitian", "file", file, s)
-
-        get_file = dbmodel.get_file_desc("Judul_Penelitian", "file")
-        for w in get_file:
-            values = w.values()
-            for y in values:
-                y = y
-
-        wb = load_workbook(filename="app/upload_data/"+file)
-        for u in wb.get_sheet_names():
-            if u == y:
-                sheet_available = True
-                break
-            else:
-                sheet_available = False
-
-        if sheet_available == False:
-            return render_template("upload_data.html")
-
-        sheet_ranges = wb[request.form['sheet']]
-        data = pd.DataFrame(sheet_ranges.values)
-    return render_template('pilih_data.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
-
 @app.route('/tampil_data', methods= ['GET','POST'])
 def Tampil_data():
     if request.method == 'POST':
@@ -74,8 +35,6 @@ def Tampil_data():
         select2 = 10
         selectcolom ="4"
         namacolom = "judul"
-
-        
 
         wb = load_workbook(filename='app/upload_data/penelitian.xlsx')
         sheet_ranges = wb['DANA UAD']
@@ -89,24 +48,11 @@ def Tampil_data():
         xname = namacolom.split(",") #memisahkan inptan nama kolom berdasarkan koma
         data =data[row1:row2][cols]#data terpilih berdasarkan inputan baris dan kolom
         data.columns = [xname]
-         
 
-        
-
-        
-
-        
+# -----------stopword-------------------------------
         factory = StopWordRemoverFactory()
         stopword = factory.create_stop_word_remover()
 
-        # list_sentence = []
-        # for reviews in get_data:
-        #   for review in reviews:
-        #       data_clean = review.lower()
-        #       isi = data_clean.values()
-        #   # isi_judul = isi
-        #   # data_clean = isi.lower()
-        #       list_sentence.append(stopword.remove(data_clean))
         a = []
         a.append(data['judul'].values.tolist())
         
@@ -115,15 +61,15 @@ def Tampil_data():
             for review in reviews:
                 data_clean = review.lower()
                 list_sentence.append(stopword.remove(data_clean))
+# -----------end of stopword-----------------------
 
-
+# -----------steming-------------------------------
         list_stem = []
         for reviews in list_sentence:
                 data_stem = (reviews.encode("ascii","ignore"))
                 list_stem.append(stemmer.stem(data_stem))
-                
+# -----------end of steming------------------------
         
-
 
         pd.options.display.max_colwidth = 999
         data = pd.DataFrame(list_stem)
@@ -133,53 +79,8 @@ def Tampil_data():
             head_filter.append(custom_head)
         data.columns = head_filter
 
-        # dbmodel = x.DBModel()  # memanggil file model dimodel class DBModel
-        # dbmodel.insert_filtering("Judul_Penelitian", "Stopword", data)
-
     return render_template('tampil_data.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
 
-@app.route('/stopword', methods= ['GET','POST'])
-def stopword():
-
-  #   dbmodel = x.DBModel()
-  #   get_data = dbmodel.get_data_all("Judul_Penelitian", "datanya")
-  #   factory = StopWordRemoverFactory()
-  #   stopword = factory.create_stop_word_remover()
-
-  #   # list_sentence = []
-  #   # for reviews in get_data:
-  #   # 	for review in reviews:
-  #   # 		data_clean = review.lower()
-  #   # 		isi = data_clean.values()
-  #   # 	# isi_judul = isi
-  #   # 	# data_clean = isi.lower()
-  #   # 		list_sentence.append(stopword.remove(data_clean))
-    
-  #   data_s=[]
-  #   for i in get_data :
-		# isi = i.values()
-		# isi_judul = isi[0]
-		# data_baru2 = isi_judul.lower()
-		# data_s.append(stopword.remove(data_baru2))
-
-
-
-  #   data = pd.DataFrame(data_s)
-  #   head_filter = []
-  #   for index in data.columns:
-  #       custom_head = "K" + str(index)
-  #       head_filter.append(custom_head)
-  #   data.columns = head_filter
-
-  #   dbmodel = x.DBModel()  # memanggil file model dimodel class DBModel
-  #   dbmodel.insert_filtering("Judul_Penelitian", "Stopword", data)
-    
-
-    return render_template('stopword.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
-
-@app.route('/stemming', methods= ['GET','POST'])
-def stemming():
-    return render_template("stemming.html")
 
 @app.route('/stc', methods= ['GET','POST'])
 def stc():
