@@ -70,6 +70,7 @@ def Tampil_data():
                 list_stem.append(stemmer.stem(data_stem))
 # -----------end of steming------------------------
         
+        variable = data_stem
 
         pd.options.display.max_colwidth = 999
         data = pd.DataFrame(list_stem)
@@ -78,12 +79,12 @@ def Tampil_data():
             custom_head = "Judul" 
             head_filter.append(custom_head)
         data.columns = head_filter
-
     return render_template('tampil_data.html', tables=[data.to_html(classes='table table-striped table-bordered table-hover')])
 
 
 @app.route('/stc', methods= ['GET','POST'])
 def stc():
+
     return render_template("stc.html")
 
 @app.route('/hasil_cluster', methods= ['GET','POST'])
